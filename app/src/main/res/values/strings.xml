@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">XColorName</string>
     <string name="title_activity_edit">EditActivity</string>
+    <string name="item_nameset_label">色名セット</string>
+    <string name="item_diffmethod_label">色差計算法</string>
     <string name="exception_io_camera_preview">Error in camera preview</string>
 </resources>

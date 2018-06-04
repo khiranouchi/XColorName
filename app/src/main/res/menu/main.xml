@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_nameset"
+        android:title="@string/item_nameset_label" />
+    <item
+        android:id="@+id/item_diffmethod"
+        android:title="@string/item_diffmethod_label" />
+</menu>

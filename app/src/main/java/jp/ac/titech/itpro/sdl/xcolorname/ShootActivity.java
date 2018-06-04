@@ -53,7 +53,7 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
         Log.d(TAG, "onResume");
         if(cameraView != null){
             mCamera = Camera.open();
-            mCamera.setPreviewCallback(this);//TODO need to be fixed<<<
+            //mCamera.setPreviewCallback(this);//TODO need to be fixed<<<
             cameraView.SetCamera(mCamera);
         }
     }
