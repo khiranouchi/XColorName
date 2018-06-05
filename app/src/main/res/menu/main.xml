@@ -2,8 +2,41 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item_nameset"
-        android:title="@string/item_nameset_label" />
+        android:title="@string/item_nameset_label">
+        <menu>
+            <item
+                android:id="@+id/item_nameset_default"
+                android:title="@string/item_nameset_default_label" />
+            <item
+                android:id="@+id/item_nameset_jis"
+                android:title="@string/item_nameset_jis_label" />
+            <item
+                android:id="@+id/item_nameset_was"
+                android:title="@string/item_nameset_was_label" />
+            <item
+                android:id="@+id/item_nameset_yos"
+                android:title="@string/item_nameset_yos_label" />
+            <item
+                android:id="@+id/item_nameset_html"
+                android:title="@string/item_nameset_html_label" />
+        </menu>
+    </item>
     <item
         android:id="@+id/item_diffmethod"
-        android:title="@string/item_diffmethod_label" />
+        android:title="@string/item_diffmethod_label">
+        <menu>
+            <item
+                android:id="@+id/item_diffmethod_rgb"
+                android:title="@string/item_diffmethod_rgb_label" />
+            <item
+                android:id="@+id/item_diffmethod_rgbr"
+                android:title="@string/item_diffmethod_rgbr_label" />
+            <item
+                android:id="@+id/item_diffmethod_xyz"
+                android:title="@string/item_diffmethod_xyz_label" />
+            <item
+                android:id="@+id/item_diffmethod_ciede"
+                android:title="@string/item_diffmethod_ciede_label" />
+        </menu>
+    </item>
 </menu>

@@ -6,11 +6,13 @@ import android.graphics.ImageFormat;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;//deprecated
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 public class ShootActivity extends AppCompatActivity implements Camera.PreviewCallback {
     private final static String TAG = "ShootActivity";
@@ -19,7 +21,11 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
     private CameraView cameraView;
     private FrameLayout previewLayout;
 
+    private FloatingActionButton shootButton;
 
+    private TextView hueTextview;
+    private TextView saturationTextview;
+    private TextView valueTextview;
 
 
 
@@ -36,11 +42,39 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
         previewLayout.addView(cameraView);
 
 
-        cameraView.setOnClickListener(new View.OnClickListener() {
+
+        shootButton = findViewById(R.id.shoot_button);
+        shootButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "cameraView.onClick");
                 startActivity(new Intent(ShootActivity.this, EditActivity.class));
+            }
+        });
+
+
+        hueTextview = findViewById(R.id.hue_textview);
+        saturationTextview = findViewById(R.id.saturation_textview);
+        valueTextview = findViewById(R.id.value_textview);
+        hueTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "hueTextview.onClick");
+                // reset value of hue_seekbar
+            }
+        });
+        saturationTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "saturationTextview.onClick");
+                // reset value of saturation_seekbar
+            }
+        });
+        valueTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "valueTextview.onClick");
+                // reset value of value_seekbar
             }
         });
 
