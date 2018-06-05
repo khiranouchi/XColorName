@@ -19,6 +19,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         holder = getHolder();
         this.holder.addCallback(this);
         this.holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        camera = null;
     }
 
     public void SetCamera(Camera camera){
@@ -30,7 +31,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         try{
             camera.setPreviewDisplay(holder);
-            camera.startPreview(); //preview
+            camera.startPreview();
         }catch(IOException e){
             Log.d(TAG, R.string.exception_io_camera_preview + e.getMessage());
         }
@@ -43,14 +44,14 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         Size optimalSize = getOptimalPreviewSize(sizes, width, height);
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
         camera.setParameters(parameters);
-        camera.startPreview(); //preview
+        camera.startPreview();
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         if(camera != null){
             camera.stopPreview();
-            camera.release(); //release
+            camera.release();
             camera = null;
         }
     }
