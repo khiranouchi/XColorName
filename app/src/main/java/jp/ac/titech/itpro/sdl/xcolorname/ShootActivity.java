@@ -53,7 +53,9 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "cameraView.onClick");
-                startActivity(new Intent(ShootActivity.this, EditActivity.class));
+                Intent intent = new Intent(ShootActivity.this, EditActivity.class);
+                intent.putExtra(getString(R.string.key_picked_color), pickedColor);
+                startActivity(intent);
             }
         });
 

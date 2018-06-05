@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">XColorName</string>
     <string name="title_activity_edit">EditActivity</string>
+    <string name="key_picked_color">XColorName.common.KEY_PICKED_COLOR</string>
     <string name="item_nameset_label">色名セット</string>
     <string name="item_diffmethod_label">色差計算法</string>
     <string name="item_nameset_default_label">JIS+和色+洋色</string>
