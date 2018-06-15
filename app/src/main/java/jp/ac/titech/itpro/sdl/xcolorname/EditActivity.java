@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import jp.ac.titech.itpro.sdl.xcolorname.color.ColorSimilarity;
 import jp.ac.titech.itpro.sdl.xcolorname.color.MyColor;
 import jp.ac.titech.itpro.sdl.xcolorname.color.MyNameColor;
 import jp.ac.titech.itpro.sdl.xcolorname.color.RgbrColorSimilarity;
@@ -113,8 +114,8 @@ public class EditActivity extends AppCompatActivity {
 
 
     private void updateResultView(MyColor pickedColor){
-        RgbrColorSimilarity rcs = new RgbrColorSimilarity();
-        List<MyNameColor> similarColors = rcs.getSimilarColor(pickedColor);
+        ColorSimilarity cs = new RgbrColorSimilarity();
+        List<MyNameColor> similarColors = cs.getSimilarColor(pickedColor);
 
         resultItems.clear();
         for(MyNameColor similarColor: similarColors){
