@@ -1,8 +1,9 @@
 package jp.ac.titech.itpro.sdl.xcolorname.color;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.TreeMap;
+import com.google.common.collect.TreeMultimap;
 
 /**
  * Calculate difference as
@@ -15,7 +16,21 @@ public class RgbrColorSimilarity extends ColorSimilarity {
         NameSet nameSet = new JisNameSet();
         List<MyNameColor> potenColors = nameSet.getColors();
 
-        TreeMap<Double, MyNameColor> resultColors = new TreeMap<>();
+        TreeMultimap<Double, MyNameColor> resultColors = TreeMultimap.create(
+                new Comparator<Double>() {
+                    @Override
+                    public int compare(Double o1, Double o2) {
+                        return o1.compareTo(o2);
+                    }
+                },
+                new Comparator<MyNameColor>() {
+                    @Override
+                    public int compare(MyNameColor o1, MyNameColor o2) {
+                        return 1;
+                    }
+                }
+                // considered as different colors anytime
+        );
         for(MyNameColor potenColor: potenColors){
             double diff = getDiff(originalColor, potenColor);
             resultColors.put(diff, potenColor); //automatically put in ascending order
