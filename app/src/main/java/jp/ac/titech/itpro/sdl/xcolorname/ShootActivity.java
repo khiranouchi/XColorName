@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
     private TextView evTextView;
     private TextView wbTextView;
     private SeekBar evSeekBar;
-    private SeekBar wbSeekBar;
+    private Button wbAutoButton, wbCloudyButton, wbDaylightButton, wbFluorescentButton, wbIncandescentButton;
     private int vaisEvSeekBar;
 
     @Override
@@ -75,12 +76,13 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "wbTextView.onClick");
-                // reset value of wb_seekbar TODO
+                if(cameraView != null && cameraView.cameraParams != null) {
+                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_AUTO);
+                }
             }
         });
 
         evSeekBar = findViewById(R.id.ev_seekbar);
-        wbSeekBar = findViewById(R.id.wb_seekbar);
         evSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
              @Override
              public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -100,9 +102,56 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
          }
         );
 
-
-
-
+        wbAutoButton = findViewById(R.id.wb_auto_button);
+        wbCloudyButton = findViewById(R.id.wb_cloudy_button);
+        wbDaylightButton = findViewById(R.id.wb_daylight_button);
+        wbFluorescentButton = findViewById(R.id.wb_fluorescent_button);
+        wbIncandescentButton = findViewById(R.id.wb_incandescent_button);
+        wbAutoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "wbAutoButton.onClick");
+                if(cameraView != null && cameraView.cameraParams != null) {
+                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_AUTO);
+                }
+            }
+        });
+        wbCloudyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "wbCloudyButton.onClick");
+                if(cameraView != null && cameraView.cameraParams != null) {
+                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_CLOUDY);
+                }
+            }
+        });
+        wbDaylightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "wbDaylightButton.onClick");
+                if(cameraView != null && cameraView.cameraParams != null) {
+                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_DAYLIGHT);
+                }
+            }
+        });
+        wbFluorescentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "wbFluorescentButton.onClick");
+                if(cameraView != null && cameraView.cameraParams != null) {
+                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_FLUORESCENT);
+                }
+            }
+        });
+        wbIncandescentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "wbIncandescentButton.onClick");
+                if(cameraView != null && cameraView.cameraParams != null) {
+                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_INCANDESCENT);
+                }
+            }
+        });
     }
 
     @Override

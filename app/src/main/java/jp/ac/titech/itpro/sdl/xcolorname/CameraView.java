@@ -96,14 +96,19 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
     public class CameraParams {
         private int minExposure, maxExposure;
-        private int exposure;
+        private List<String> supportedWhiteBalance;
 
+        public final int MY_WB_AUTO = 0;
+        public final int MY_WB_CLOUDY = 1;
+        public final int MY_WB_DAYLIGHT = 2;
+        public final int MY_WB_FLUORESCENT = 3;
+        public final int MY_WB_INCANDESCENT = 4;
 
         private CameraParams() {
-            minExposure = camera.getParameters().getMinExposureCompensation();
-            maxExposure = camera.getParameters().getMaxExposureCompensation();
-
-
+            Camera.Parameters params = camera.getParameters();
+            minExposure = params.getMinExposureCompensation();
+            maxExposure = params.getMaxExposureCompensation();
+            supportedWhiteBalance = params.getSupportedWhiteBalance();
         }
 
         public int getMinExposure() {
@@ -125,8 +130,27 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             camera.setParameters(params);
         }
 
+        public boolean isSupportedWhiteBalanceType(int whiteBalanceType) {
+            return supportedWhiteBalance.contains(getWhiteBalanceString(whiteBalanceType));
+        }
 
+        public void setWhiteBalance(int whiteBalanceType) {
+            String whiteBalance = getWhiteBalanceString(whiteBalanceType);
+            if(supportedWhiteBalance.contains(whiteBalance)) {
+                Camera.Parameters params = camera.getParameters();
+                params.setWhiteBalance(whiteBalance);
+                camera.setParameters(params);
+            }
+        }
 
-
+        private String getWhiteBalanceString(int whiteBalanceType) {
+            switch(whiteBalanceType){
+                case 1: return Camera.Parameters.WHITE_BALANCE_CLOUDY_DAYLIGHT;
+                case 2: return Camera.Parameters.WHITE_BALANCE_DAYLIGHT;
+                case 3: return Camera.Parameters.WHITE_BALANCE_FLUORESCENT;
+                case 4: return Camera.Parameters.WHITE_BALANCE_INCANDESCENT;
+                default: return Camera.Parameters.WHITE_BALANCE_AUTO;
+            }
+        }
     }
 }
