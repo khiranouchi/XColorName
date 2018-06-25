@@ -14,17 +14,23 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder holder;
     private Camera camera;
 
+    public CameraParams cameraParams;
+
     public CameraView(Context context) {
         super(context);
         holder = getHolder();
         this.holder.addCallback(this);
         this.holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         camera = null;
+        cameraParams = null;
     }
 
-    public void SetCamera(Camera camera){
+    public void setCamera(Camera camera) {
         this.camera = camera;
-        if(camera != null) this.camera.setDisplayOrientation(90);//TODO kari<<<
+        if(camera != null){
+            cameraParams = new CameraParams();
+            this.camera.setDisplayOrientation(90);//TODO kari<<<
+        }
     }
 
     @Override
@@ -85,5 +91,42 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
         return optimalSize;
+    }
+
+
+    public class CameraParams {
+        private int minExposure, maxExposure;
+        private int exposure;
+
+
+        private CameraParams() {
+            minExposure = camera.getParameters().getMinExposureCompensation();
+            maxExposure = camera.getParameters().getMaxExposureCompensation();
+
+
+        }
+
+        public int getMinExposure() {
+            return minExposure;
+        }
+
+        public int getMaxExposure() {
+            return maxExposure;
+        }
+
+        public void setExposure(int value) {
+            if(value < minExposure){
+                value = minExposure;
+            }else if(value > maxExposure){
+                value = maxExposure;
+            }
+            Camera.Parameters params = camera.getParameters();
+            params.setExposureCompensation(value);
+            camera.setParameters(params);
+        }
+
+
+
+
     }
 }

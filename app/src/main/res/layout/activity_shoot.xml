@@ -54,12 +54,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/hue_textview"
+                android:id="@+id/ev_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/color_hue_label" />
+                android:text="@string/camera_ev_label" />
             <SeekBar
-                android:id="@+id/hue_seekbar"
+                android:id="@+id/ev_seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
@@ -69,27 +69,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/saturation_textview"
+                android:id="@+id/wb_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/color_saturation_label" />
+                android:text="@string/camera_wb_label" />
             <SeekBar
-                android:id="@+id/saturation_seekbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/value_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/color_value_label" />
-            <SeekBar
-                android:id="@+id/value_seekbar"
+                android:id="@+id/wb_seekbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

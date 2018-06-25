@@ -13,6 +13,8 @@
     <string name="item_diffmethod_rgbr_label">修正RGB</string>
     <string name="item_diffmethod_xyz_label">XYZ</string>
     <string name="item_diffmethod_ciede_label">CIEDE2000</string>
+    <string name="camera_ev_label">EV</string>
+    <string name="camera_wb_label">WB</string>
     <string name="color_hue_label">色相</string>
     <string name="color_saturation_label">彩度</string>
     <string name="color_value_label">明度</string>

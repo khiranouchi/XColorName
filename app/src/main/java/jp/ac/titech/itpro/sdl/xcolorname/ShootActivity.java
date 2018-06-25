@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class ShootActivity extends AppCompatActivity implements Camera.PreviewCallback {
@@ -28,9 +29,11 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
 
     private FloatingActionButton shootButton;
 
-    private TextView hueTextview;
-    private TextView saturationTextview;
-    private TextView valueTextview;
+    private TextView evTextView;
+    private TextView wbTextView;
+    private SeekBar evSeekBar;
+    private SeekBar wbSeekBar;
+    private int vaisEvSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +44,10 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
         pickedColorView = findViewById(R.id.picked_color_view);
         pickedColor = -1;
 
-        mCamera = null;//<<<TODO
+        mCamera = null;
         cameraView = new CameraView(this);
         previewLayout = findViewById(R.id.preview_layout);
         previewLayout.addView(cameraView);
-
-
 
         shootButton = findViewById(R.id.shoot_button);
         shootButton.setOnClickListener(new View.OnClickListener() {
@@ -59,36 +60,49 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             }
         });
 
-
-
-
-
-
-
-        hueTextview = findViewById(R.id.hue_textview);
-        saturationTextview = findViewById(R.id.saturation_textview);
-        valueTextview = findViewById(R.id.value_textview);
-        hueTextview.setOnClickListener(new View.OnClickListener() {
+        evTextView = findViewById(R.id.ev_textview);
+        wbTextView = findViewById(R.id.wb_textview);
+        evTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "hueTextview.onClick");
-                // reset value of hue_seekbar TODO
+                Log.d(TAG, "evTextView.onClick");
+                if(cameraView != null && cameraView.cameraParams != null) {
+                    evSeekBar.setProgress(vaisEvSeekBar);
+                }
             }
         });
-        saturationTextview.setOnClickListener(new View.OnClickListener() {
+        wbTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "saturationTextview.onClick");
-                // reset value of saturation_seekbar TODO
+                Log.d(TAG, "wbTextView.onClick");
+                // reset value of wb_seekbar TODO
             }
         });
-        valueTextview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "valueTextview.onClick");
-                // reset value of value_seekbar TODO
-            }
-        });
+
+        evSeekBar = findViewById(R.id.ev_seekbar);
+        wbSeekBar = findViewById(R.id.wb_seekbar);
+        evSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+             @Override
+             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                 Log.d(TAG, "evSeekBar.onProgressChanged");
+                 if(cameraView != null && cameraView.cameraParams != null) {
+                     cameraView.cameraParams.setExposure(progress - vaisEvSeekBar);
+                 }
+             }
+
+             @Override
+             public void onStartTrackingTouch(SeekBar seekBar) {
+             }
+
+             @Override
+             public void onStopTrackingTouch(SeekBar seekBar) {
+             }
+         }
+        );
+
+
+
+
     }
 
     @Override
@@ -98,7 +112,16 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
         if(cameraView != null){
             mCamera = Camera.open();
             mCamera.setPreviewCallback(this);
-            cameraView.SetCamera(mCamera);
+            cameraView.setCamera(mCamera);
+
+            if(cameraView.cameraParams != null){
+                vaisEvSeekBar = - cameraView.cameraParams.getMinExposure();
+                evSeekBar.setMax(cameraView.cameraParams.getMaxExposure() + vaisEvSeekBar);
+                evSeekBar.setProgress(vaisEvSeekBar);
+
+
+
+            }
         }
     }
 
@@ -107,7 +130,7 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
         super.onPause();
         Log.d(TAG, "onPause");
         if(mCamera != null){
-            cameraView.SetCamera(null);
+            cameraView.setCamera(null);
             mCamera.setPreviewCallback(null);
             mCamera.release();
             mCamera = null;
