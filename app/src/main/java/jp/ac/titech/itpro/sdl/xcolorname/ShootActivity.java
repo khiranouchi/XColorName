@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 public class ShootActivity extends AppCompatActivity implements Camera.PreviewCallback {
     private final static String TAG = "ShootActivity";
+    private final static String KEY_SIS_EV_PROGRESS = "ShootActivity.KEY_SIS_EV_PROGRESS";
+    private final static String KEY_SIS_WB_TYPE = "ShootActivity.KEY_SIS_WB_TYPE";
 
     private View pickedColorView;
     private int pickedColor;
@@ -34,13 +36,24 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
     private TextView wbTextView;
     private SeekBar evSeekBar;
     private Button wbAutoButton, wbCloudyButton, wbDaylightButton, wbFluorescentButton, wbIncandescentButton;
-    private int vaisEvSeekBar;
+    private int biasEvSeekBar;
+
+    private int progressEvSeekBar; //for saved instances
+    private int selectedWbButton; //for saved instances
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_shoot);
+
+        // init saved instances
+        progressEvSeekBar = -1;
+        selectedWbButton = -1;
+        if(savedInstanceState != null){
+            progressEvSeekBar = savedInstanceState.getInt(KEY_SIS_EV_PROGRESS);
+            selectedWbButton = savedInstanceState.getInt(KEY_SIS_WB_TYPE);
+        }
 
         pickedColorView = findViewById(R.id.picked_color_view);
         pickedColor = -1;
@@ -68,7 +81,7 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             public void onClick(View v) {
                 Log.d(TAG, "evTextView.onClick");
                 if(cameraView != null && cameraView.cameraParams != null) {
-                    evSeekBar.setProgress(vaisEvSeekBar);
+                    evSeekBar.setProgress(biasEvSeekBar);
                 }
             }
         });
@@ -88,7 +101,7 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
              public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                  Log.d(TAG, "evSeekBar.onProgressChanged");
                  if(cameraView != null && cameraView.cameraParams != null) {
-                     cameraView.cameraParams.setExposure(progress - vaisEvSeekBar);
+                     cameraView.cameraParams.setExposure(progress - biasEvSeekBar);
                  }
              }
 
@@ -112,7 +125,8 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             public void onClick(View v) {
                 Log.d(TAG, "wbAutoButton.onClick");
                 if(cameraView != null && cameraView.cameraParams != null) {
-                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_AUTO);
+                    selectedWbButton = cameraView.cameraParams.MY_WB_AUTO;
+                    cameraView.cameraParams.setWhiteBalance(selectedWbButton);
                 }
             }
         });
@@ -121,7 +135,8 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             public void onClick(View v) {
                 Log.d(TAG, "wbCloudyButton.onClick");
                 if(cameraView != null && cameraView.cameraParams != null) {
-                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_CLOUDY);
+                    selectedWbButton = cameraView.cameraParams.MY_WB_CLOUDY;
+                    cameraView.cameraParams.setWhiteBalance(selectedWbButton);
                 }
             }
         });
@@ -130,7 +145,8 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             public void onClick(View v) {
                 Log.d(TAG, "wbDaylightButton.onClick");
                 if(cameraView != null && cameraView.cameraParams != null) {
-                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_DAYLIGHT);
+                    selectedWbButton = cameraView.cameraParams.MY_WB_DAYLIGHT;
+                    cameraView.cameraParams.setWhiteBalance(selectedWbButton);
                 }
             }
         });
@@ -139,7 +155,8 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             public void onClick(View v) {
                 Log.d(TAG, "wbFluorescentButton.onClick");
                 if(cameraView != null && cameraView.cameraParams != null) {
-                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_FLUORESCENT);
+                    selectedWbButton = cameraView.cameraParams.MY_WB_FLUORESCENT;
+                    cameraView.cameraParams.setWhiteBalance(selectedWbButton);
                 }
             }
         });
@@ -148,7 +165,8 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             public void onClick(View v) {
                 Log.d(TAG, "wbIncandescentButton.onClick");
                 if(cameraView != null && cameraView.cameraParams != null) {
-                    cameraView.cameraParams.setWhiteBalance(cameraView.cameraParams.MY_WB_INCANDESCENT);
+                    selectedWbButton = cameraView.cameraParams.MY_WB_INCANDESCENT;
+                    cameraView.cameraParams.setWhiteBalance(selectedWbButton);
                 }
             }
         });
@@ -164,12 +182,28 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             cameraView.setCamera(mCamera);
 
             if(cameraView.cameraParams != null){
-                vaisEvSeekBar = - cameraView.cameraParams.getMinExposure();
-                evSeekBar.setMax(cameraView.cameraParams.getMaxExposure() + vaisEvSeekBar);
-                evSeekBar.setProgress(vaisEvSeekBar);
+                biasEvSeekBar = - cameraView.cameraParams.getMinExposure();
+                evSeekBar.setMax(cameraView.cameraParams.getMaxExposure() + biasEvSeekBar);
 
+                // init EV
+                if(progressEvSeekBar == -1) {
+                    evSeekBar.setProgress(biasEvSeekBar);
+                }else{
+                    evSeekBar.setProgress(progressEvSeekBar);
+                }
 
-
+                // init WB
+                if(selectedWbButton == cameraView.cameraParams.MY_WB_CLOUDY){
+                    wbCloudyButton.performClick();
+                }else if(selectedWbButton == cameraView.cameraParams.MY_WB_DAYLIGHT){
+                    wbDaylightButton.performClick();
+                }else if(selectedWbButton == cameraView.cameraParams.MY_WB_FLUORESCENT){
+                    wbFluorescentButton.performClick();
+                }else if(selectedWbButton == cameraView.cameraParams.MY_WB_INCANDESCENT){
+                    wbIncandescentButton.performClick();
+                }else{// AUTO or -1
+                    wbAutoButton.performClick();
+                }
             }
         }
     }
@@ -186,7 +220,12 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
         }
     }
 
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_SIS_EV_PROGRESS, evSeekBar.getProgress());
+        outState.putInt(KEY_SIS_WB_TYPE, selectedWbButton);
+    }
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
@@ -206,7 +245,4 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
         pickedColor = bmp.getPixel(width / 2, height / 2);
         pickedColorView.setBackgroundColor(pickedColor);
     }
-
-
-
 }

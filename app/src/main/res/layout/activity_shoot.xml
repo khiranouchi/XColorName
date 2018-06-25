@@ -81,31 +81,36 @@
                 android:id="@+id/wb_auto_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="AUTO" />
 
             <Button
                 android:id="@+id/wb_cloudy_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="CLOUDY"  />
 
             <Button
                 android:id="@+id/wb_daylight_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="DAYLIGHT" />
 
             <Button
                 android:id="@+id/wb_fluorescent_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="FLUORESCENT" />
 
             <Button
                 android:id="@+id/wb_incandescent_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:text="INCANDESCENT" />
         </LinearLayout>
 
     </LinearLayout>
