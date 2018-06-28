@@ -6,8 +6,10 @@ import android.content.Context;
 import android.hardware.Camera;//deprecated
 import android.hardware.Camera.Size;//deprecated
 import android.util.Log;
+import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
+import android.view.WindowManager;
 
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "CameraPreview";
@@ -29,7 +31,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         this.camera = camera;
         if(camera != null){
             cameraParams = new CameraParams();
-            this.camera.setDisplayOrientation(90);//TODO kari<<<
         }
     }
 
@@ -45,6 +46,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        setProperDisplayOrientation();
         Camera.Parameters parameters = camera.getParameters();
         List<Size> sizes = parameters.getSupportedPreviewSizes();
         Size optimalSize = getOptimalPreviewSize(sizes, width, height);
@@ -59,6 +61,25 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             camera.stopPreview();
             camera.release();
             camera = null;
+        }
+    }
+
+    private void setProperDisplayOrientation() {
+        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        int rotation = windowManager.getDefaultDisplay().getRotation();
+        switch(rotation){
+            case Surface.ROTATION_0:
+                this.camera.setDisplayOrientation(90);
+                break;
+            case Surface.ROTATION_90:
+                this.camera.setDisplayOrientation(0);
+                break;
+            case Surface.ROTATION_180:
+                this.camera.setDisplayOrientation(270);
+                break;
+            case Surface.ROTATION_270:
+                this.camera.setDisplayOrientation(180);
+                break;
         }
     }
 
