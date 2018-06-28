@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import android.content.Context;
 import android.hardware.Camera;//deprecated
-import android.hardware.Camera.Size;//deprecated
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceView;
@@ -48,8 +47,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         setProperDisplayOrientation();
         Camera.Parameters parameters = camera.getParameters();
-        List<Size> sizes = parameters.getSupportedPreviewSizes();
-        Size optimalSize = getOptimalPreviewSize(sizes, width, height);
+        List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
+        Camera.Size optimalSize = getOptimalPreviewSize(sizes, width, height);
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
         camera.setParameters(parameters);
         camera.startPreview();
@@ -83,31 +82,33 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
+    private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int width, int height) {
         final double ASPECT_TOLERANCE = 0.1;
-        double targetRatio = (double)w/h;
-        if(sizes == null) return null;
+        double targetRatio = (double) width / height;
+        if(sizes == null){
+            return null;
+        }
 
-        Size optimalSize = null;
+        Camera.Size optimalSize = null;
         double minDiff = Double.MAX_VALUE;
 
-        int targetHeight = h;
-
-        for (Size size: sizes) {
-            double ratio = (double)size.width/size.height;
-            if(Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
-            if(Math.abs(size.height - targetHeight) < minDiff){
+        for(Camera.Size size: sizes){
+            double ratio = (double) size.width / size.height;
+            if(Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE){
+                continue;
+            }
+            if(Math.abs(size.height - height) < minDiff){
                 optimalSize = size;
-                minDiff = Math.abs(size.height - targetHeight);
+                minDiff = Math.abs(size.height - height);
             }
         }
 
         if(optimalSize == null){
             minDiff = Double.MAX_VALUE;
-            for(Size size : sizes){
-                if(Math.abs(size.height - targetHeight) < minDiff){
+            for(Camera.Size size: sizes){
+                if(Math.abs(size.height - height) < minDiff){
                     optimalSize = size;
-                    minDiff = Math.abs(size.height - targetHeight);
+                    minDiff = Math.abs(size.height - height);
                 }
             }
         }
