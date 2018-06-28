@@ -10,10 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import jp.ac.titech.itpro.sdl.xcolorname.color.ColorSimilarity;
-import jp.ac.titech.itpro.sdl.xcolorname.color.MyColor;
+import jp.ac.titech.itpro.sdl.xcolorname.color.MyFilterableColor;
 import jp.ac.titech.itpro.sdl.xcolorname.color.MyNameColor;
 import jp.ac.titech.itpro.sdl.xcolorname.color.RgbrColorSimilarity;
 
@@ -21,15 +22,17 @@ public class EditActivity extends AppCompatActivity {
     private final static String TAG = "EditActivity";
 
     private View pickedColorView;
-    private MyColor pickedColor;
+    private MyFilterableColor pickedColor;
 
     private ListView resultView;
     ResultAdapter resultAdapter;
     List<ResultViewItem> resultItems;
 
-    private TextView hueTextview;
-    private TextView saturationTextview;
-    private TextView valueTextview;
+    private TextView hueTextView, saturationTextView, valueTextView;
+    private SeekBar hueSeekBar, saturationSeekBar, valueSeekBar;
+    private final int biasHueSeekBar = 15;
+    private final int biasSaturationSeekBar = 15;
+    private final int biasValueSeekBar = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,7 @@ public class EditActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        pickedColor = new MyColor(intent.getIntExtra(getString(R.string.key_picked_color), -1));
+        pickedColor = new MyFilterableColor(intent.getIntExtra(getString(R.string.key_picked_color), -1));
         pickedColorView = findViewById(R.id.picked_color_view);
         pickedColorView.setBackgroundColor(pickedColor.getIntColor());
 
@@ -47,36 +50,91 @@ public class EditActivity extends AppCompatActivity {
         resultItems = new ArrayList<>();
         resultAdapter = new ResultAdapter(this, R.layout.resultview_item, resultItems);
         resultView.setAdapter(resultAdapter);
-        updateResultView(pickedColor);
+        updateResultView();
 
-
-
-
-
-
-
-        hueTextview = findViewById(R.id.hue_textview);
-        saturationTextview = findViewById(R.id.saturation_textview);
-        valueTextview = findViewById(R.id.value_textview);
-        hueTextview.setOnClickListener(new View.OnClickListener() {
+        hueTextView = findViewById(R.id.hue_textview);
+        saturationTextView = findViewById(R.id.saturation_textview);
+        valueTextView = findViewById(R.id.value_textview);
+        hueTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "hueTextview.onClick");
-                // reset value of hue_seekbar TODO
+                hueSeekBar.setProgress(biasHueSeekBar); // reset Hue
             }
         });
-        saturationTextview.setOnClickListener(new View.OnClickListener() {
+        saturationTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "saturationTextview.onClick");
-                // reset value of saturation_seekbar TODO
+                saturationSeekBar.setProgress(biasSaturationSeekBar); // reset Saturation
             }
         });
-        valueTextview.setOnClickListener(new View.OnClickListener() {
+        valueTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "valueTextview.onClick");
-                // reset value of value_seekbar TODO
+                valueSeekBar.setProgress(biasValueSeekBar); // reset Value
+            }
+        });
+
+        hueSeekBar = findViewById(R.id.hue_seekbar);
+        saturationSeekBar = findViewById(R.id.saturation_seekbar);
+        valueSeekBar = findViewById(R.id.value_seekbar);
+        hueSeekBar.setMax(biasHueSeekBar * 2);
+        saturationSeekBar.setMax(biasSaturationSeekBar * 2);
+        valueSeekBar.setMax(biasValueSeekBar * 2);
+        hueSeekBar.setProgress(biasHueSeekBar);
+        saturationSeekBar.setProgress(biasSaturationSeekBar);
+        valueSeekBar.setProgress(biasValueSeekBar);
+        hueSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.d(TAG, "hueSeekBar.onProgressChanged");
+                pickedColor.filterHue(progress - biasHueSeekBar);
+                pickedColorView.setBackgroundColor(pickedColor.getIntColor());
+                updateResultView();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        saturationSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.d(TAG, "saturationSeekBar.onProgressChanged");
+                pickedColor.filterSaturation(progress - biasSaturationSeekBar);
+                pickedColorView.setBackgroundColor(pickedColor.getIntColor());
+                updateResultView();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+        valueSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.d(TAG, "valueSeekBar.onProgressChanged");
+                pickedColor.filterValue(progress - biasValueSeekBar);
+                pickedColorView.setBackgroundColor(pickedColor.getIntColor());
+                updateResultView();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
     }
@@ -113,7 +171,7 @@ public class EditActivity extends AppCompatActivity {
 
 
 
-    private void updateResultView(MyColor pickedColor){
+    private void updateResultView(){
         ColorSimilarity cs = new RgbrColorSimilarity();
         List<MyNameColor> similarColors = cs.getSimilarColor(pickedColor);
 

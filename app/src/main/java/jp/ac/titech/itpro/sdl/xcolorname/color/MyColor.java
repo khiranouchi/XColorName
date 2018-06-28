@@ -1,17 +1,15 @@
 package jp.ac.titech.itpro.sdl.xcolorname.color;
 
 public class MyColor {
-    private int intColor;//lazy sometimes
-    private String colorRgb;//lazy
-    private int red, green, blue;
+    protected int intColor;//lazy sometimes
+    protected String colorRgb;//lazy
+    protected int red, green, blue;
 
     public MyColor(int intColor) {
         // intColor must be 0xFFxxxxxx TODO
         this.intColor = intColor;
         this.colorRgb = null;
-        blue = 0xFF & intColor; //get lower 8-1bit
-        green = 0xFF & (intColor >>> 8); //get lower 16-9bit
-        red = 0xFF & (intColor >>> 16); //get lower 24-17bit
+        updateRedGreenBlue(); //this.red/green/blue = ...
     }
 
     MyColor(int red, int green, int blue) {
@@ -52,5 +50,11 @@ public class MyColor {
 
     public int getBlue() {
         return blue;
+    }
+
+    protected void updateRedGreenBlue() {
+        blue = 0xFF & intColor; //get lower 8-1bit
+        green = 0xFF & (intColor >>> 8); //get lower 16-9bit
+        red = 0xFF & (intColor >>> 16); //get lower 24-17bit
     }
 }
