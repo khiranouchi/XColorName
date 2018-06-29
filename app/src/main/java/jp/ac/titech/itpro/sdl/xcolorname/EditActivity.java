@@ -2,8 +2,6 @@ package jp.ac.titech.itpro.sdl.xcolorname;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.Attributes;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,12 +19,16 @@ import jp.ac.titech.itpro.sdl.xcolorname.color.JisNameSet;
 import jp.ac.titech.itpro.sdl.xcolorname.color.MyFilterableColor;
 import jp.ac.titech.itpro.sdl.xcolorname.color.MyNameColor;
 import jp.ac.titech.itpro.sdl.xcolorname.color.NameSet;
+import jp.ac.titech.itpro.sdl.xcolorname.color.RgbColorSimilarity;
 import jp.ac.titech.itpro.sdl.xcolorname.color.RgbrColorSimilarity;
 import jp.ac.titech.itpro.sdl.xcolorname.color.WasNameSet;
 import jp.ac.titech.itpro.sdl.xcolorname.color.YosNameSet;
 
 public class EditActivity extends AppCompatActivity {
     private final static String TAG = "EditActivity";
+
+    private final static int COLOR_SIMILARITY_RGB = 0;
+    private final static int COLOR_SIMILARITY_RGBR = 1;
     private final static int COLOR_NAMESET_JIS = 0;
     private final static int COLOR_NAMESET_WAS = 1;
     private final static int COLOR_NAMESET_YOS = 2;
@@ -39,7 +41,8 @@ public class EditActivity extends AppCompatActivity {
     ResultAdapter resultAdapter;
     List<ResultViewItem> resultItems;
 
-    private int colorNameSet;
+    private int colorSimilarityType;
+    private int colorNamesetType;
 
     private TextView hueTextView, saturationTextView, valueTextView;
     private SeekBar hueSeekBar, saturationSeekBar, valueSeekBar;
@@ -65,7 +68,8 @@ public class EditActivity extends AppCompatActivity {
         resultView.setAdapter(resultAdapter);
         updateResultView();
 
-        colorNameSet = 0; // default is JIS
+        colorSimilarityType = COLOR_SIMILARITY_RGBR; // default is rgbr
+        colorNamesetType = COLOR_NAMESET_JIS; // default is JIS
 
         hueTextView = findViewById(R.id.hue_textview);
         saturationTextView = findViewById(R.id.saturation_textview);
@@ -187,15 +191,21 @@ public class EditActivity extends AppCompatActivity {
 
 
     private void updateResultView(){
-        NameSet nameSet;
-        switch(colorNameSet){
+        NameSet nameSet = null;
+        switch(colorNamesetType){
             case COLOR_NAMESET_JIS: nameSet = new JisNameSet(); break;
             case COLOR_NAMESET_WAS: nameSet = new WasNameSet(); break;
             case COLOR_NAMESET_YOS: nameSet = new YosNameSet(); break;
-            default: nameSet = new HtmlNameSet(); break;
+            case COLOR_NAMESET_HTML: nameSet = new HtmlNameSet(); break;
         }
-        ColorSimilarity cs = new RgbrColorSimilarity();
-        List<MyNameColor> similarColors = cs.getSimilarColor(pickedColor, nameSet);
+
+        ColorSimilarity colorSimilarity = null;
+        switch(colorSimilarityType){
+            case COLOR_SIMILARITY_RGB: colorSimilarity = new RgbColorSimilarity(); break;
+            case COLOR_SIMILARITY_RGBR: colorSimilarity = new RgbrColorSimilarity(); break;
+        }
+
+        List<MyNameColor> similarColors = colorSimilarity.getSimilarColor(pickedColor, nameSet);
 
         resultItems.clear();
         for(MyNameColor similarColor: similarColors){
