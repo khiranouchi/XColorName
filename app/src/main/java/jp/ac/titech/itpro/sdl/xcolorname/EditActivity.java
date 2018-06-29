@@ -26,6 +26,8 @@ import jp.ac.titech.itpro.sdl.xcolorname.color.YosNameSet;
 
 public class EditActivity extends AppCompatActivity {
     private final static String TAG = "EditActivity";
+    private final static String KEY_SIS_SIMILARITY_TYPE = "EditActivity.KEY_SYS_SIMILARITY_TYPE";
+    private final static String KEY_SIS_NAMESET_TYPE = "EditActivity.KEY_SIS_NAMESET_TYPE";
 
     private final static int COLOR_SIMILARITY_RGB = 0;
     private final static int COLOR_SIMILARITY_RGBR = 1;
@@ -58,16 +60,20 @@ public class EditActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_edit);
 
-        updateTitleWithCurrentTypes();
-
         Intent intent = getIntent();
+
+        if(savedInstanceState != null){
+            colorSimilarityType = savedInstanceState.getInt(KEY_SIS_SIMILARITY_TYPE);
+            colorNamesetType = savedInstanceState.getInt(KEY_SIS_NAMESET_TYPE);
+        }else{
+            colorSimilarityType = COLOR_SIMILARITY_RGBR; // default is rgbr
+            colorNamesetType = COLOR_NAMESET_JIS; // default is JIS
+        }
+        updateTitleWithCurrentTypes();
 
         pickedColor = new MyFilterableColor(intent.getIntExtra(getString(R.string.key_picked_color), -1));
         pickedColorView = findViewById(R.id.picked_color_view);
         pickedColorView.setBackgroundColor(pickedColor.getIntColor());
-
-        colorSimilarityType = COLOR_SIMILARITY_RGBR; // default is rgbr
-        colorNamesetType = COLOR_NAMESET_JIS; // default is JIS
 
         resultView = findViewById(R.id.result_view);
         resultItems = new ArrayList<>();
@@ -160,6 +166,13 @@ public class EditActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_SIS_SIMILARITY_TYPE, colorSimilarityType);
+        outState.putInt(KEY_SIS_NAMESET_TYPE, colorNamesetType);
     }
 
     @Override
