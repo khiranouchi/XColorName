@@ -209,6 +209,16 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        Log.d(TAG, "onWindowFocusChanged");
+        int x = previewLayout.getWidth() / 2;
+        int y = previewLayout.getHeight() / 2;
+        AuxiliaryView auxiliaryView = new AuxiliaryView(this, x, y);
+        previewLayout.addView(auxiliaryView);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
