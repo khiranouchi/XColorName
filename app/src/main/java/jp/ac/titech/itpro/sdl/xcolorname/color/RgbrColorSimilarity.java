@@ -12,8 +12,7 @@ import com.google.common.collect.TreeMultimap;
 public class RgbrColorSimilarity extends ColorSimilarity {
 
     @Override
-    public List<MyNameColor> getSimilarColor(MyColor originalColor) {
-        NameSet nameSet = new JisNameSet();
+    public List<MyNameColor> getSimilarColor(MyColor originalColor, NameSet nameSet) {
         List<MyNameColor> potenColors = nameSet.getColors();
 
         TreeMultimap<Double, MyNameColor> resultColors = TreeMultimap.create(

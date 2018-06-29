@@ -2,6 +2,8 @@ package jp.ac.titech.itpro.sdl.xcolorname;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Attributes;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +16,21 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import jp.ac.titech.itpro.sdl.xcolorname.color.ColorSimilarity;
+import jp.ac.titech.itpro.sdl.xcolorname.color.HtmlNameSet;
+import jp.ac.titech.itpro.sdl.xcolorname.color.JisNameSet;
 import jp.ac.titech.itpro.sdl.xcolorname.color.MyFilterableColor;
 import jp.ac.titech.itpro.sdl.xcolorname.color.MyNameColor;
+import jp.ac.titech.itpro.sdl.xcolorname.color.NameSet;
 import jp.ac.titech.itpro.sdl.xcolorname.color.RgbrColorSimilarity;
+import jp.ac.titech.itpro.sdl.xcolorname.color.WasNameSet;
+import jp.ac.titech.itpro.sdl.xcolorname.color.YosNameSet;
 
 public class EditActivity extends AppCompatActivity {
     private final static String TAG = "EditActivity";
+    private final static int COLOR_NAMESET_JIS = 0;
+    private final static int COLOR_NAMESET_WAS = 1;
+    private final static int COLOR_NAMESET_YOS = 2;
+    private final static int COLOR_NAMESET_HTML = 3;
 
     private View pickedColorView;
     private MyFilterableColor pickedColor;
@@ -27,6 +38,8 @@ public class EditActivity extends AppCompatActivity {
     private ListView resultView;
     ResultAdapter resultAdapter;
     List<ResultViewItem> resultItems;
+
+    private int colorNameSet;
 
     private TextView hueTextView, saturationTextView, valueTextView;
     private SeekBar hueSeekBar, saturationSeekBar, valueSeekBar;
@@ -51,6 +64,8 @@ public class EditActivity extends AppCompatActivity {
         resultAdapter = new ResultAdapter(this, R.layout.resultview_item, resultItems);
         resultView.setAdapter(resultAdapter);
         updateResultView();
+
+        colorNameSet = 0; // default is JIS
 
         hueTextView = findViewById(R.id.hue_textview);
         saturationTextView = findViewById(R.id.saturation_textview);
@@ -172,8 +187,15 @@ public class EditActivity extends AppCompatActivity {
 
 
     private void updateResultView(){
+        NameSet nameSet;
+        switch(colorNameSet){
+            case COLOR_NAMESET_JIS: nameSet = new JisNameSet(); break;
+            case COLOR_NAMESET_WAS: nameSet = new WasNameSet(); break;
+            case COLOR_NAMESET_YOS: nameSet = new YosNameSet(); break;
+            default: nameSet = new HtmlNameSet(); break;
+        }
         ColorSimilarity cs = new RgbrColorSimilarity();
-        List<MyNameColor> similarColors = cs.getSimilarColor(pickedColor);
+        List<MyNameColor> similarColors = cs.getSimilarColor(pickedColor, nameSet);
 
         resultItems.clear();
         for(MyNameColor similarColor: similarColors){

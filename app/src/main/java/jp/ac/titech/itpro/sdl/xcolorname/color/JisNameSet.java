@@ -3,10 +3,10 @@ package jp.ac.titech.itpro.sdl.xcolorname.color;
 import java.util.ArrayList;
 import java.util.List;
 
-class JisNameSet extends NameSet {
+public class JisNameSet extends NameSet {
 
     @Override
-    List<MyNameColor> getColors(){
+    public List<MyNameColor> getColors(){
         List<MyNameColor> colors = new ArrayList<>();
 
         colors.add(new MyNameColor("鴇色(ときいろ)", 250, 156, 184));
