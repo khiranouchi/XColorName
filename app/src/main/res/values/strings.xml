@@ -4,15 +4,14 @@
     <string name="key_picked_color">XColorName.common.KEY_PICKED_COLOR</string>
     <string name="item_nameset_label">色名セット</string>
     <string name="item_diffmethod_label">色差計算法</string>
-    <string name="item_nameset_default_label">JIS+和色+洋色</string>
     <string name="item_nameset_jis_label">JIS</string>
     <string name="item_nameset_was_label">和色</string>
     <string name="item_nameset_yos_label">洋色</string>
     <string name="item_nameset_html_label">HTML</string>
     <string name="item_diffmethod_rgb_label">RGB</string>
     <string name="item_diffmethod_rgbr_label">修正RGB</string>
-    <string name="item_diffmethod_xyz_label">XYZ</string>
-    <string name="item_diffmethod_ciede_label">CIEDE2000</string>
+    <string name="item_diffmethod_xyz_label">XYZ(未実装)</string>
+    <string name="item_diffmethod_ciede_label">CIEDE2000(未実装)</string>
     <string name="camera_ev_label">EV</string>
     <string name="camera_wb_label">WB</string>
     <string name="color_hue_label">色相</string>

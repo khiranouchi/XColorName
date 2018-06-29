@@ -29,6 +29,8 @@ public class EditActivity extends AppCompatActivity {
 
     private final static int COLOR_SIMILARITY_RGB = 0;
     private final static int COLOR_SIMILARITY_RGBR = 1;
+    private final static int COLOR_SIMILARITY_XYZ = 2; // not implemented yet
+    private final static int COLOR_SIMILARITY_CIEDE = 3; // not implemented yet
     private final static int COLOR_NAMESET_JIS = 0;
     private final static int COLOR_NAMESET_WAS = 1;
     private final static int COLOR_NAMESET_YOS = 2;
@@ -37,12 +39,12 @@ public class EditActivity extends AppCompatActivity {
     private View pickedColorView;
     private MyFilterableColor pickedColor;
 
+    private int colorSimilarityType;
+    private int colorNamesetType;
+
     private ListView resultView;
     ResultAdapter resultAdapter;
     List<ResultViewItem> resultItems;
-
-    private int colorSimilarityType;
-    private int colorNamesetType;
 
     private TextView hueTextView, saturationTextView, valueTextView;
     private SeekBar hueSeekBar, saturationSeekBar, valueSeekBar;
@@ -56,20 +58,22 @@ public class EditActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate");
         setContentView(R.layout.activity_edit);
 
+        updateTitleWithCurrentTypes();
+
         Intent intent = getIntent();
 
         pickedColor = new MyFilterableColor(intent.getIntExtra(getString(R.string.key_picked_color), -1));
         pickedColorView = findViewById(R.id.picked_color_view);
         pickedColorView.setBackgroundColor(pickedColor.getIntColor());
 
+        colorSimilarityType = COLOR_SIMILARITY_RGBR; // default is rgbr
+        colorNamesetType = COLOR_NAMESET_JIS; // default is JIS
+
         resultView = findViewById(R.id.result_view);
         resultItems = new ArrayList<>();
         resultAdapter = new ResultAdapter(this, R.layout.resultview_item, resultItems);
         resultView.setAdapter(resultAdapter);
-        updateResultView();
-
-        colorSimilarityType = COLOR_SIMILARITY_RGBR; // default is rgbr
-        colorNamesetType = COLOR_NAMESET_JIS; // default is JIS
+        updateResultView(); // update here!!
 
         hueTextView = findViewById(R.id.hue_textview);
         saturationTextView = findViewById(R.id.saturation_textview);
@@ -158,9 +162,6 @@ public class EditActivity extends AppCompatActivity {
         });
     }
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu");
@@ -171,23 +172,46 @@ public class EditActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
-        switch (item.getItemId()) {
-            case R.id.item_nameset:
-
-                // TODO
-
+        switch(item.getItemId()){
+            case R.id.item_nameset_jis:
+                colorNamesetType = COLOR_NAMESET_JIS;
+                updateResultView();
+                updateTitleWithCurrentTypes();
                 break;
-            case R.id.item_diffmethod:
-
-                // TODO
-
+            case R.id.item_nameset_was:
+                colorNamesetType = COLOR_NAMESET_WAS;
+                updateResultView();
+                updateTitleWithCurrentTypes();
+                break;
+            case R.id.item_nameset_yos:
+                colorNamesetType = COLOR_NAMESET_YOS;
+                updateResultView();
+                updateTitleWithCurrentTypes();
+                break;
+            case R.id.item_nameset_html:
+                colorNamesetType = COLOR_NAMESET_HTML;
+                updateResultView();
+                updateTitleWithCurrentTypes();
+                break;
+            case R.id.item_diffmethod_rgb:
+                colorSimilarityType = COLOR_SIMILARITY_RGB;
+                updateResultView();
+                updateTitleWithCurrentTypes();
+                break;
+            case R.id.item_diffmethod_rgbr:
+                colorSimilarityType = COLOR_SIMILARITY_RGBR;
+                updateResultView();
+                updateTitleWithCurrentTypes();
+                break;
+            case R.id.item_diffmethod_xyz:
+                // after create XyzColorSimilarity class TODO
+                break;
+            case R.id.item_diffmethod_ciede:
+                // after create CiedeColorSimilarity class TODO
                 break;
         }
         return true;
     }
-
-
-
 
 
     private void updateResultView(){
@@ -219,5 +243,31 @@ public class EditActivity extends AppCompatActivity {
     }
 
 
+    private void updateTitleWithCurrentTypes() {
+        String baseTitle = getString(R.string.app_name);
+        String namesetLabel = getString(R.string.item_nameset_label);
+        String diffmethodLabel = getString(R.string.item_diffmethod_label);
 
+        String nameset = "";
+        switch(colorNamesetType){
+            case COLOR_NAMESET_JIS: nameset = getString(R.string.item_nameset_jis_label); break;
+            case COLOR_NAMESET_WAS: nameset = getString(R.string.item_nameset_was_label); break;
+            case COLOR_NAMESET_YOS: nameset = getString(R.string.item_nameset_yos_label); break;
+            case COLOR_NAMESET_HTML: nameset = getString(R.string.item_nameset_html_label); break;
+        }
+
+        String similarity = "";
+        switch(colorSimilarityType){
+            case COLOR_SIMILARITY_RGB:
+                similarity = getString(R.string.item_diffmethod_rgb_label); break;
+            case COLOR_SIMILARITY_RGBR:
+                similarity = getString(R.string.item_diffmethod_rgbr_label); break;
+            case COLOR_SIMILARITY_XYZ:
+                similarity = getString(R.string.item_diffmethod_xyz_label); break;
+            case COLOR_SIMILARITY_CIEDE:
+                similarity = getString(R.string.item_diffmethod_ciede_label); break;
+        }
+
+        setTitle(baseTitle + " (" + namesetLabel + ": " + nameset + " / " + diffmethodLabel + ": " + similarity + ")");
+    }
 }

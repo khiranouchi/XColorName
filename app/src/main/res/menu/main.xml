@@ -5,9 +5,6 @@
         android:title="@string/item_nameset_label">
         <menu>
             <item
-                android:id="@+id/item_nameset_default"
-                android:title="@string/item_nameset_default_label" />
-            <item
                 android:id="@+id/item_nameset_jis"
                 android:title="@string/item_nameset_jis_label" />
             <item
