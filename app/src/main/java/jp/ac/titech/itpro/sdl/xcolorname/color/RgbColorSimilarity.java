@@ -1,8 +1,8 @@
 package jp.ac.titech.itpro.sdl.xcolorname.color;
 
 /**
- * Calculate difference as
- * diff^2 = (r2-r1)^2 + (g2-g1)^2 + (b2-b1)^2
+ * One of the methods to calculate color similarity.
+ * Calculate difference as "diff^2 = (r2-r1)^2 + (g2-g1)^2 + (b2-b1)^2"
  */
 public class RgbColorSimilarity extends ColorSimilarity {
 

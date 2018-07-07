@@ -1,5 +1,14 @@
 package jp.ac.titech.itpro.sdl.xcolorname.color;
 
+/**
+ * This class is to manage color.
+ * You can get following info from specified intColor. <br>
+ * {@linkplain MyColor#intColor}: rgb color format (0xFFrrggbb) <br>
+ * {@linkplain MyColor#colorRgb}: string of rgb format ("RRGGBB") <br>
+ * {@linkplain MyColor#red}/{@linkplain MyColor#green}/{@linkplain MyColor#blue}: rgb <br>
+ * @see MyFilterableColor
+ * @see MyNameColor
+ */
 public class MyColor {
     protected int intColor;//lazy sometimes
     protected String colorRgb;//lazy

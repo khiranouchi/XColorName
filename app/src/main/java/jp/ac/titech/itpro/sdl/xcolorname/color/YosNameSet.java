@@ -3,6 +3,9 @@ package jp.ac.titech.itpro.sdl.xcolorname.color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Non-Japanese color nameset (285 colors).
+ */
 public class YosNameSet extends NameSet {
 
     @Override

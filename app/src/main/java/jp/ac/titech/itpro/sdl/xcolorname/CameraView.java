@@ -10,6 +10,11 @@ import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.view.WindowManager;
 
+/**
+ * This is view which displays camera preview.
+ * This view supports device rotation.
+ * Call {@linkplain CameraView#setCamera} to set camera instance to this view.
+ */
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "CameraPreview";
     private SurfaceHolder holder;
@@ -26,6 +31,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         cameraParams = null;
     }
 
+    /**
+     * Set camera instance to this view.
+     * @param camera camera instance
+     */
     public void setCamera(Camera camera) {
         this.camera = camera;
         if(camera != null){
@@ -63,6 +72,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * Set proper orientation by changing orientation according to the current device rotation.
+     * Call this when this.{@linkplain CameraView#camera} is nonnull.
+     */
     private void setProperDisplayOrientation() {
         WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         int rotation = windowManager.getDefaultDisplay().getRotation();
@@ -82,6 +95,13 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    /**
+     * Get preview size optimal to the device. (not work properly) TODO
+     * @param sizes list of size supported by the device?
+     * @param width width of this view?
+     * @param height height of this view?
+     * @return optimal preview size
+     */
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int width, int height) {
         final double ASPECT_TOLERANCE = 0.1;
         double targetRatio = (double) width / height;
@@ -116,6 +136,9 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
+    /**
+     * Camera parameters EV / WB.
+     */
     public class CameraParams {
         private int minExposure, maxExposure;
         private List<String> supportedWhiteBalance;
@@ -126,6 +149,9 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         public final int MY_WB_FLUORESCENT = 3;
         public final int MY_WB_INCANDESCENT = 4;
 
+        /**
+         * Init min/max EV and supported WB of the device.
+         */
         private CameraParams() {
             Camera.Parameters params = camera.getParameters();
             minExposure = params.getMinExposureCompensation();
@@ -141,6 +167,11 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             return maxExposure;
         }
 
+        /**
+         * Set EV.
+         * When specified value is out of min/max EV, min/max EV value is set.
+         * @param value EV value
+         */
         public void setExposure(int value) {
             if(value < minExposure){
                 value = minExposure;
@@ -152,10 +183,19 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
             camera.setParameters(params);
         }
 
+        /**
+         * Get if specified WB type is supported or not.
+         * @param whiteBalanceType WB type
+         * @return if WB type is supported or not
+         */
         public boolean isSupportedWhiteBalanceType(int whiteBalanceType) {
             return supportedWhiteBalance.contains(getWhiteBalanceString(whiteBalanceType));
         }
 
+        /**
+         * Set WB.
+         * @param whiteBalanceType WB type (choose from {@linkplain CameraParams#MY_WB_AUTO} / {@linkplain CameraParams#MY_WB_CLOUDY} / {@linkplain CameraParams#MY_WB_DAYLIGHT} / {@linkplain CameraParams#MY_WB_FLUORESCENT} / {@linkplain CameraParams#MY_WB_INCANDESCENT}
+         */
         public void setWhiteBalance(int whiteBalanceType) {
             String whiteBalance = getWhiteBalanceString(whiteBalanceType);
             if(supportedWhiteBalance.contains(whiteBalance)) {

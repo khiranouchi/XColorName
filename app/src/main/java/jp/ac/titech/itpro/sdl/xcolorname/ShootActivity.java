@@ -18,6 +18,11 @@ import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+/**
+ * Activity which previews camera and get color at the center of the camera.
+ * Camera parameter EV / WB can be changed by seekBar / button.
+ * When shootButton is pressed, start {@linkplain EditActivity}.
+ */
 public class ShootActivity extends AppCompatActivity implements Camera.PreviewCallback {
     private final static String TAG = "ShootActivity";
     private final static String KEY_SIS_EV_PROGRESS = "ShootActivity.KEY_SIS_EV_PROGRESS";
@@ -36,10 +41,10 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
     private TextView wbTextView;
     private SeekBar evSeekBar;
     private Button wbAutoButton, wbCloudyButton, wbDaylightButton, wbFluorescentButton, wbIncandescentButton;
-    private int biasEvSeekBar;
+    private int biasEvSeekBar; // eg. if this==12, scale starts from -12 instead of 0
 
-    private int progressEvSeekBar; //for saved instances
-    private int selectedWbButton; //for saved instances
+    private int progressEvSeekBar; //for saved instances (to init evSeekBar in onResume)
+    private int selectedWbButton; //for saved instances (to init wbXXXButton in onResume)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +63,13 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
         pickedColorView = findViewById(R.id.picked_color_view);
         pickedColor = -1;
 
+        // create cameraView(CameraView) and add it to previewLayout(FrameLayout)
         mCamera = null;
         cameraView = new CameraView(this);
         previewLayout = findViewById(R.id.preview_layout);
         previewLayout.addView(cameraView);
 
+        // start EditActivity when shootButton is pressed
         shootButton = findViewById(R.id.shoot_button);
         shootButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,6 +81,7 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             }
         });
 
+        // reset EV(seekBar) / WB(button) when each textView is clicked
         evTextView = findViewById(R.id.ev_textview);
         wbTextView = findViewById(R.id.wb_textview);
         evTextView.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +103,7 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
             }
         });
 
+        // update camera parameter EV when seekBar is changed
         evSeekBar = findViewById(R.id.ev_seekbar);
         evSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
              @Override
@@ -115,6 +124,7 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
          }
         );
 
+        // change camera parameter WB when each button is clicked
         wbAutoButton = findViewById(R.id.wb_auto_button);
         wbCloudyButton = findViewById(R.id.wb_cloudy_button);
         wbDaylightButton = findViewById(R.id.wb_daylight_button);
@@ -214,7 +224,7 @@ public class ShootActivity extends AppCompatActivity implements Camera.PreviewCa
         Log.d(TAG, "onWindowFocusChanged");
         int x = previewLayout.getWidth() / 2;
         int y = previewLayout.getHeight() / 2;
-        AuxiliaryView auxiliaryView = new AuxiliaryView(this, x, y);
+        AuxiliaryView auxiliaryView = new AuxiliaryView(this, x, y); //set auxiliary cross
         previewLayout.addView(auxiliaryView);
     }
 

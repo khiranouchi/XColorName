@@ -3,6 +3,9 @@ package jp.ac.titech.itpro.sdl.xcolorname.color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * HTML color nameset (140 colors).
+ */
 public class HtmlNameSet extends NameSet {
 
     @Override

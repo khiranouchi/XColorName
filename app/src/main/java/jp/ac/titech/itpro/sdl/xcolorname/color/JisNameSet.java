@@ -3,6 +3,9 @@ package jp.ac.titech.itpro.sdl.xcolorname.color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Jis color nameset (269 colors).
+ */
 public class JisNameSet extends NameSet {
 
     @Override

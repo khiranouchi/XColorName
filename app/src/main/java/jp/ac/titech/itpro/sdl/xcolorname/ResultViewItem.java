@@ -1,9 +1,12 @@
 package jp.ac.titech.itpro.sdl.xcolorname;
 
+/**
+ * Define items which is contained in one item of resultView in {@linkplain EditActivity}.
+ */
 public class ResultViewItem {
-    private int color; //kari<<< TODO
+    private int color;
     private String colorName;
-    private String colorRgb; //string(for cache ?)<<<
+    private String colorRgb;
 
     public ResultViewItem(int color, String colorName, String colorRgb) {
         this.color = color;

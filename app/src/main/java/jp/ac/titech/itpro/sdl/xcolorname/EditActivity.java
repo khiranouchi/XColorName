@@ -24,6 +24,11 @@ import jp.ac.titech.itpro.sdl.xcolorname.color.RgbrColorSimilarity;
 import jp.ac.titech.itpro.sdl.xcolorname.color.WasNameSet;
 import jp.ac.titech.itpro.sdl.xcolorname.color.YosNameSet;
 
+/**
+ * Activity which shows similar colors of the color picked in {@linkplain ShootActivity}.
+ * Hue / Saturation / Value can be changed by seekBar.
+ * Color name set and method calculating color similarity can be selected in menu.
+ */
 public class EditActivity extends AppCompatActivity {
     private final static String TAG = "EditActivity";
     private final static String KEY_SIS_SIMILARITY_TYPE = "EditActivity.KEY_SYS_SIMILARITY_TYPE";
@@ -62,6 +67,7 @@ public class EditActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        // init color nameset and similarity
         if(savedInstanceState != null){
             colorSimilarityType = savedInstanceState.getInt(KEY_SIS_SIMILARITY_TYPE);
             colorNamesetType = savedInstanceState.getInt(KEY_SIS_NAMESET_TYPE);
@@ -71,7 +77,7 @@ public class EditActivity extends AppCompatActivity {
         }
         updateTitleWithCurrentTypes();
 
-        pickedColor = new MyFilterableColor(intent.getIntExtra(getString(R.string.key_picked_color), -1));
+        pickedColor = new MyFilterableColor(intent.getIntExtra(getString(R.string.key_picked_color), -1)); // get the color picked in ShootActivity
         pickedColorView = findViewById(R.id.picked_color_view);
         pickedColorView.setBackgroundColor(pickedColor.getIntColor());
 
@@ -81,6 +87,7 @@ public class EditActivity extends AppCompatActivity {
         resultView.setAdapter(resultAdapter);
         updateResultView(); // update here!!
 
+        // reset Hue/Saturation/Value(seekBar) when each textView is clicked
         hueTextView = findViewById(R.id.hue_textview);
         saturationTextView = findViewById(R.id.saturation_textview);
         valueTextView = findViewById(R.id.value_textview);
@@ -88,24 +95,25 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "hueTextview.onClick");
-                hueSeekBar.setProgress(biasHueSeekBar); // reset Hue
+                hueSeekBar.setProgress(biasHueSeekBar);
             }
         });
         saturationTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "saturationTextview.onClick");
-                saturationSeekBar.setProgress(biasSaturationSeekBar); // reset Saturation
+                saturationSeekBar.setProgress(biasSaturationSeekBar);
             }
         });
         valueTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "valueTextview.onClick");
-                valueSeekBar.setProgress(biasValueSeekBar); // reset Value
+                valueSeekBar.setProgress(biasValueSeekBar);
             }
         });
 
+        // update pickedColor Hue/Saturation/Value when each seekBar is changed
         hueSeekBar = findViewById(R.id.hue_seekbar);
         saturationSeekBar = findViewById(R.id.saturation_seekbar);
         valueSeekBar = findViewById(R.id.value_seekbar);

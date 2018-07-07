@@ -3,6 +3,9 @@ package jp.ac.titech.itpro.sdl.xcolorname.color;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Japanese color nameset (465 colors).
+ */
 public class WasNameSet extends NameSet {
 
     @Override

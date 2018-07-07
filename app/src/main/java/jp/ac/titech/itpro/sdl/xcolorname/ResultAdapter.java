@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+/**
+ * Array adapter used in {@linkplain EditActivity}.
+ */
 public class ResultAdapter extends ArrayAdapter<ResultViewItem> {
     private final static String TAG = "ResultAdapter";
 

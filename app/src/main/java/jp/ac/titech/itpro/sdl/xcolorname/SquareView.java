@@ -5,6 +5,9 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 
+/**
+ * This is view whose width and height is equal size.
+ */
 public class SquareView extends View {
 
     private boolean mAdjustWidth;

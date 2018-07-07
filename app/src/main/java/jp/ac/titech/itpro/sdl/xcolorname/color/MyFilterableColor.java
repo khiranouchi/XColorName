@@ -2,6 +2,10 @@ package jp.ac.titech.itpro.sdl.xcolorname.color;
 
 import android.graphics.Color;
 
+/**
+ * This class filterable {@linkplain MyColor}.
+ * You can change color by filtering hue/saturation/value value of the color.
+ */
 public class MyFilterableColor extends MyColor {
     private float originalHue, originalSaturation, originalValue;
     private float curDeltaHue, curDeltaSaturation, curDeltaValue;
@@ -21,6 +25,11 @@ public class MyFilterableColor extends MyColor {
         curDeltaValue = 0;
     }
 
+    /**
+     * Change hue value of the color.
+     * Hue of color is between 0.0 and 360.0.
+     * @param deltaHue amount of hue changed (negative number is possible)
+     */
     public void filterHue(float deltaHue) {
         // Hue is between 0.0 and 360.0
         // deltaHue 1.0 <=> Hue 1.0
@@ -37,6 +46,11 @@ public class MyFilterableColor extends MyColor {
         updateRedGreenBlue(); //this.red/green/blue = ...
     }
 
+    /**
+     * Change saturation value of the color.
+     * Saturation of color is between 0.0 and 100.0.
+     * @param deltaSaturation amount of saturation changed (negative number is possible)
+     */
     public void filterSaturation(float deltaSaturation) {
         // Saturation is between 0.0 and 1.0
         // deltaSaturation 1.0 <=> Saturation 0.01
@@ -53,6 +67,11 @@ public class MyFilterableColor extends MyColor {
         updateRedGreenBlue(); //this.red/green/blue = ...
     }
 
+    /**
+     * Change value value of the color.
+     * Value of color is between 0.0 and 100.0.
+     * @param deltaValue amount of value changed (negative number is possible)
+     */
     public void filterValue(float deltaValue) {
         // Value is between 0.0 and 1.0
         // deltaValue 1.0 <=> Value 0.01

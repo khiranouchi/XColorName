@@ -1,5 +1,9 @@
 package jp.ac.titech.itpro.sdl.xcolorname.color;
 
+/**
+ * This is extension of {@linkplain MyColor}.
+ * Color name is added as color info.
+ */
 public class MyNameColor extends MyColor {
     private String colorName;
 
